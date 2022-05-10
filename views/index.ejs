@@ -1,0 +1,36 @@
+<%- include("_header") -%>
+<h1>Welcome to our site</h1>
+
+<% if(message !== "success") { %>
+    <h1>We Encountered an Error</h1>
+    <p><%= message %></p>
+<% } else { %>
+    <h2>There are <%= model.length %> products in the database</h2>
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">State Name</th>
+            <th scope="col">Current sales</th>
+            <th scope="col">Prev sales</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% model.forEach(customer => { %>
+            <tr>
+                <td><%= customer.cust_id %></td>
+                <td><%= customer.cust_fname %></td>
+                <td><%= customer.cust_lname %></td>
+                <td><%= customer.cust_state %></td>
+                <td><%= customer.cust_curr_sales %></td>
+                <td><%= customer.cust_prev_sales %></td>
+            </tr>
+        <% }) %>
+        </tbody>
+    </table>
+<% } %>
+
+<%- include("_footer") -%>
+
