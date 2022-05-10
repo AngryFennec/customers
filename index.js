@@ -32,7 +32,6 @@ app.listen(process.env.PORT || 3000, () => {
 });
 
 // Setup routes
-
 app.get("/", (req, res) => {
     res.render("index");
 });
@@ -42,6 +41,7 @@ app.get("/create", (req, res) => {
     res.render("create", {message: ''});
 });
 
+// /delete/slpfsofopsdf, /delete/101, ... но не /delete
 app.get("/delete/:id", (req, res) => {
     (async () => {
         const data = await dblib.getRecordById(req.params.id);
@@ -84,21 +84,6 @@ app.get("/export", (req, res) => {
             message: result.msg
         })
     });
-    // const sql = "SELECT * FROM CUSTOMERS ORDER BY CUST_ID";
-    // pool.query(sql, [], (err, result) => {
-    //     let message = "";
-    //     let model = {};
-    //     if(err) {
-    //         message = `Error - ${err.message}`;
-    //     } else {
-    //         message = "success";
-    //         model = result.rows;
-    //     };
-    //     res.render("export", {
-    //         model : model,
-    //         message: message
-    //     });
-    // });
 });
 
 app.post("/export",  (req, res) => {
@@ -113,7 +98,7 @@ app.post("/export",  (req, res) => {
             result.rows.forEach(customer => {
                 output += `${customer.cust_id},${customer.cust_fname}, ${customer.cust_lname}, ${customer.cust_state}, ${customer.cust_curr_sales}, ${customer.cust_prev_sales}\r\n`;
             });
-            const fileName = req.body && req.body.exFilename ? req.body.exFilename : 'export.txt';
+            const fileName = req.body && req.body.exFilename ? req.body.exFilename : 'export.txt'; // тернаный оператор
             res.setHeader('Content-disposition', `attachment; filename=${fileName}`);
             res.header("Content-Type", "text/csv");
             res.attachment(fileName);
@@ -135,13 +120,13 @@ app.post("/import",  upload.single('filename'), (req, res) => {
     const buffer = req.file.buffer;
     const lines = buffer.toString().split(/\r?\n/);
 
-    let numInserted = 0;
-    let numFailed = 0;
-    let errorMessage = '';
+    let numInserted = 0; // кол-во добавленных записей
+    let numFailed = 0; // кол-во ошибок
+    let errorMessage = ''; // текст ошибок
 
     (async () => {
         for (line of lines) {
-            const result = await dblib.insertCustomer(line.split(","));
+            const result = await dblib.insertCustomer(line.split(",")); // 1,2,3,4 -> [1, 2, 3, 4]
             if (result.trans === "success") {
                 numInserted++;
             } else {

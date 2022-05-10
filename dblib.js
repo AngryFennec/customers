@@ -41,6 +41,8 @@ const getRecordById = (id) => {
         });
 };
 
+//[123, 'A', 'asdd', 'JJ', null, null]
+// {id: 123, fname: 'AA', ... }
 const insertCustomer = (customer) => {
     // Will accept either a product array or product object
     if (customer instanceof Array) {
@@ -52,6 +54,9 @@ const insertCustomer = (customer) => {
         }
         if (params[5] === "") {
             params[5] = null;
+        }
+        if (params[3] === "") {
+            params[3] = null;
         }
     };
 
