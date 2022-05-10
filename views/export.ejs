@@ -2,10 +2,10 @@
 <h2>Customers Export</h2>
 <p>Total number of records in database: <%= model.length %></p>
 <p>Enter a filename and click "Export customers</p>
-<form action="/export" method="post">
+<form action="/export" method="post" id="export">
     <label>
         File name:
-        <input type="text" id="filename" name="filename" value="export.txt">
+        <input type="text" id="exFilename" name="exFilename" value="export.txt">
     </label>
     <button type="submit">Export customers</button>
 </form>

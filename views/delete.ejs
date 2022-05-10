@@ -1,0 +1,38 @@
+<%- include("_header") -%>
+
+<h1>Delete Customer</h1>
+
+<form action="/delete" method="POST" id="delete">
+    <p>
+        <label for="id">ID:</label>
+        <input name="id" id="id" required type="text" readonly value="<%= data.cust_id %>">
+    </p>
+    <p>
+        <label for="fname">First Name:</label>
+        <input type="text" name="fname" id="fname"  readonly value="<%= data.cust_fname %>">
+    </p>
+    <p>
+        <label for="lname">Last Name:</label>
+        <input type="text" name="lname" id="lname"  readonly value="<%= data.cust_lname %>">
+    </p>
+    <p>
+        <label for="state">State:</label>
+        <input type="text" name="state" id="state" readonly value="<%= data.cust_state %>">
+    </p>
+    <p>
+        <label for="sales">Sales YTD:</label>
+        <input name="sales" id="sales" type="text"  readonly value="<%= data.cust_curr_sales %>">
+    </p>
+    <p>
+        <label for="prev">Previous Years Sales:</label>
+        <input name="prev" id="prev"  type="text" readonly value="<%= data.cust_prev_sales %>">
+    </p>
+
+    <button class="btn btn-secondary" type="submit">Delete</button>
+</form>
+
+<% if(message) { %>
+    <p><%= message %></p>
+<% } %>
+
+<%- include("_footer") -%>

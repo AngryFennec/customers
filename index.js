@@ -1,6 +1,8 @@
 // Add required packages
 const express = require("express");
 const multer = require("multer");
+const dblib = require("./dblib.js");
+
 
 require('dotenv').config();
 const app = express();
@@ -10,6 +12,8 @@ app.set("view engine", "ejs");
 
 const upload = multer();
 
+
+app.use(express.urlencoded({ extended: false }));
 
 
 // Add database package and connection string (can remove ssl)
@@ -28,44 +32,76 @@ app.listen(process.env.PORT || 3000, () => {
 });
 
 // Setup routes
+
 app.get("/", (req, res) => {
-    const sql = "SELECT * FROM CUSTOMERS ORDER BY CUST_ID";
-    pool.query(sql, [], (err, result) => {
-        let message = "";
-        let model = {};
-        if(err) {
-            message = `Error - ${err.message}`;
-        } else {
-            message = "success";
-            model = result.rows;
-        };
-        res.render("index", {
-            message: message,
-            model : model
-        });
-    });
+    res.render("index");
 });
+
+
+app.get("/create", (req, res) => {
+    res.render("create", {message: ''});
+});
+
+app.get("/delete/:id", (req, res) => {
+    (async () => {
+        const data = await dblib.getRecordById(req.params.id);
+        console.log(data);
+        res.render("delete", {message: '', data: data.records});
+    })();
+});
+
+app.get("/update/:id", (req, res) => {
+    (async () => {
+        const data = await dblib.getRecordById(req.params.id);
+        console.log(data);
+        res.render("update", {message: '', data: data.records});
+    })();
+});
+
+app.post("/create",  (req, res) => {
+    (async () => {
+        const result = await dblib.insertCustomer(req.body);
+        res.render("create",{message: result.msg});
+    })();
+});
+
+app.get("/customers", (req, res) => {
+    dblib.getTotalRecords().then(result => {
+        res.render("customers", {
+            model: result.records,
+            message: result.msg
+        })
+    }
+);
+
+});
+
 
 app.get("/export", (req, res) => {
-    const sql = "SELECT * FROM CUSTOMERS ORDER BY CUST_ID";
-    pool.query(sql, [], (err, result) => {
-        var message = "";
-        var model = {};
-        if(err) {
-            message = `Error - ${err.message}`;
-        } else {
-            message = "success";
-            model = result.rows;
-        };
+    dblib.getTotalRecords().then(result => {
         res.render("export", {
-            model : model,
-            message: message
-        });
+            model: result.records,
+            message: result.msg
+        })
     });
+    // const sql = "SELECT * FROM CUSTOMERS ORDER BY CUST_ID";
+    // pool.query(sql, [], (err, result) => {
+    //     let message = "";
+    //     let model = {};
+    //     if(err) {
+    //         message = `Error - ${err.message}`;
+    //     } else {
+    //         message = "success";
+    //         model = result.rows;
+    //     };
+    //     res.render("export", {
+    //         model : model,
+    //         message: message
+    //     });
+    // });
 });
 
-app.post("/export", (req, res) => {
-    console.log(req.body);
+app.post("/export",  (req, res) => {
     const sql = "SELECT * FROM CUSTOMERS ORDER BY CUST_ID";
     pool.query(sql, [], (err, result) => {
         let message = "";
@@ -77,9 +113,49 @@ app.post("/export", (req, res) => {
             result.rows.forEach(customer => {
                 output += `${customer.cust_id},${customer.cust_fname}, ${customer.cust_lname}, ${customer.cust_state}, ${customer.cust_curr_sales}, ${customer.cust_prev_sales}\r\n`;
             });
+            const fileName = req.body && req.body.exFilename ? req.body.exFilename : 'export.txt';
+            res.setHeader('Content-disposition', `attachment; filename=${fileName}`);
             res.header("Content-Type", "text/csv");
-            res.attachment("export.txt");
-            return res.send(output);
+            res.attachment(fileName);
+            res.send(output);
         };
     });
+});
+
+app.get("/import", (req, res) => {
+    res.render("import", {message: ''});
+});
+
+app.post("/import",  upload.single('filename'), (req, res) => {
+    if(!req.file || Object.keys(req.file).length === 0) {
+        message = "Error: Import file not uploaded";
+        return res.send(message);
+    };
+    //Read file line by line, inserting records
+    const buffer = req.file.buffer;
+    const lines = buffer.toString().split(/\r?\n/);
+
+    let numInserted = 0;
+    let numFailed = 0;
+    let errorMessage = '';
+
+    (async () => {
+        for (line of lines) {
+            const result = await dblib.insertCustomer(line.split(","));
+            if (result.trans === "success") {
+                numInserted++;
+            } else {
+                numFailed++;
+                errorMessage += `${result.msg} \r\n`;
+            };
+        };
+        console.log(`Records processed: ${numInserted + numFailed}`);
+        console.log(`Records successfully inserted: ${numInserted}`);
+        console.log(`Records with insertion errors: ${numFailed}`);
+        if(numFailed > 0) {
+            console.log("Error Details:");
+            console.log(errorMessage);
+        };
+       res.send(errorMessage);
+    })();
 });

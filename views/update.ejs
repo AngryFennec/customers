@@ -1,0 +1,41 @@
+<%- include("_header") -%>
+
+<h1>Update Customer</h1>
+
+<form action="/update" method="POST" id="create">
+    <p>
+        <label for="id">ID:</label>
+        <input name="id" id="id" required type="text" readonly value="<%= data.cust_id %>">
+        <span>(required)</span>
+    </p>
+    <p>
+        <label for="fname">First Name:</label>
+        <input type="text" name="fname" id="fname" required value="<%= data.cust_fname %>">
+        <span>(required)</span>
+    </p>
+    <p>
+        <label for="lname">Last Name:</label>
+        <input type="text" name="lname" id="lname" required  value="<%= data.cust_lname %>">
+        <span>(required)</span>
+    </p>
+    <p>
+        <label for="state">State:</label>
+        <input type="text" name="state" id="state" pattern="[a-zA-Z]{1,2}" value="<%= data.cust_state %>">
+    </p>
+    <p>
+        <label for="sales">Sales YTD:</label>
+        <input name="sales" id="sales" type="text" pattern="\d*" value="<%= data.cust_curr_sales %>">
+    </p>
+    <p>
+        <label for="prev">Previous Years Sales:</label>
+        <input name="prev" id="prev"  type="text" pattern="\d*" value="<%= data.cust_prev_sales %>">
+    </p>
+
+    <button class="btn btn-primary" type="submit">Update</button>
+</form>
+
+<% if(message) { %>
+    <p><%= message %></p>
+<% } %>
+
+<%- include("_footer") -%>
