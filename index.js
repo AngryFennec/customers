@@ -58,6 +58,26 @@ app.get("/update/:id", (req, res) => {
     })();
 });
 
+app.post("/delete/:id", (req, res) => {
+    (async () => {
+        const data = await dblib.getRecordById(req.params.id);
+        const result = await dblib.deleteRecordById(req.params.id);
+        res.render("delete",{message: result.msg, data: data.records});
+    })();
+});
+
+
+app.post("/update/:id", (req, res) => {
+    (async () => {
+        console.log(req.body);
+        const result = await dblib.updateRecordById(req.body);
+        console.log(result);
+        const data = await dblib.getRecordById(req.params.id);
+        res.render("update",{message: result.msg, data: data.records});
+    })();
+});
+
+
 app.post("/create",  (req, res) => {
     (async () => {
         const result = await dblib.insertCustomer(req.body);

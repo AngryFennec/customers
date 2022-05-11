@@ -41,10 +41,43 @@ const getRecordById = (id) => {
         });
 };
 
-//[123, 'A', 'asdd', 'JJ', null, null]
-// {id: 123, fname: 'AA', ... }
-const insertCustomer = (customer) => {
+const deleteRecordById = (id) => {
+    sql = `DELETE FROM CUSTOMERS WHERE cust_id=${id}`;
+    return pool.query(sql)
+        .then(result => {
+            return {
+                msg: `Customer id ${id} successfully deleted`,
+            }
+        })
+        .catch(err => {
+            return {
+                msg: `Error: ${err.message}`
+            }
+        });
+};
+
+const updateRecordById = (customer) => {
+    const params = convertCustomerToParams(customer);
+    sql = `UPDATE customers SET cust_fname = '${params[1]}', cust_lname = '${params[2]}', cust_state = '${params[3]}', 
+    cust_curr_sales = '${params[4]}', cust_prev_sales = '${params[5]}' WHERE cust_id = ${params[0]}`;
+
+    return pool.query(sql)
+        .then(result => {
+            return {
+                msg: `Customer id ${params[0]} successfully updated`,
+                record: params
+            }
+        })
+        .catch(err => {
+            return {
+                msg: `Error: ${err.message}`
+            }
+        });
+};
+
+const convertCustomerToParams = (customer) => {
     // Will accept either a product array or product object
+    let params;
     if (customer instanceof Array) {
         params = customer;
     } else {
@@ -59,6 +92,13 @@ const insertCustomer = (customer) => {
             params[3] = null;
         }
     };
+    return params;
+}
+
+//[123, 'A', 'asdd', 'JJ', null, null]
+// {id: 123, fname: 'AA', ... }
+const insertCustomer = (customer) => {
+    const params = convertCustomerToParams(customer);
 
     const sql = `INSERT INTO CUSTOMERS(cust_id, cust_fname, cust_lname, cust_state, cust_curr_sales, cust_prev_sales) 
                  VALUES ($1, $2, $3, $4, $5, $6)`;
@@ -81,4 +121,6 @@ const insertCustomer = (customer) => {
 
 module.exports.insertCustomer = insertCustomer;
 module.exports.getRecordById = getRecordById;
+module.exports.deleteRecordById = deleteRecordById;
+module.exports.updateRecordById = updateRecordById;
 module.exports.getTotalRecords = getTotalRecords;

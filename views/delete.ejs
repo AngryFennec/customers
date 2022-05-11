@@ -2,7 +2,7 @@
 
 <h1>Delete Customer</h1>
 
-<form action="/delete" method="POST" id="delete">
+<form action="/delete/<%= data.cust_id %>" method="POST" id="delete">
     <p>
         <label for="id">ID:</label>
         <input name="id" id="id" required type="text" readonly value="<%= data.cust_id %>">

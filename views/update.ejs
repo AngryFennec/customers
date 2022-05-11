@@ -2,7 +2,7 @@
 
 <h1>Update Customer</h1>
 
-<form action="/update" method="POST" id="create">
+<form action="/update/<%= data.cust_id %>" method="POST" id="create">
     <p>
         <label for="id">ID:</label>
         <input name="id" id="id" required type="text" readonly value="<%= data.cust_id %>">
