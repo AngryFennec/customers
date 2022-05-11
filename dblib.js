@@ -118,6 +118,67 @@ const insertCustomer = (customer) => {
         });
 };
 
+const findProducts = (customer) => {
+    // Will build query based on data provided from the form
+    //  Use parameters to avoid sql injection
+
+    // Declare variables
+    let i = 1;
+    params = [];
+    sql = "SELECT * FROM customer WHERE true";
+
+    // Check data provided and build query as necessary
+    if (customer.cust_id !== "") {
+        params.push(parseInt(customer.cust_id));
+        sql += ` AND cust_id = $${i}`;
+        i++;
+    };
+    if (customer.cust_fname !== "") {
+        params.push(`${customer.cust_fname}%`);
+        sql += ` AND UPPER(cust_fname) LIKE UPPER($${i})`;
+        i++;
+    };
+    if (customer.cust_lname !== "") {
+        params.push(`${customer.cust_lname}%`);
+        sql += ` AND UPPER(cust_lname) LIKE UPPER($${i})`;
+        i++;
+    };
+    if (customer.cust_state !== "") {
+        params.push(`${customer.cust_state}%`);
+        sql += ` AND UPPER(cust_state) LIKE UPPER($${i})`;
+        i++;
+    };
+    if (customer.cust_curr_sales !== "") {
+        params.push(Number(customers.cust_curr_sales));
+        sql += ` AND cust_curr_sales >= $${i}`;
+        i++;
+    };
+    if (customer.cust_prev_sales !== "") {
+        params.push(Number(customers.cust_prev_sales));
+        sql += ` AND cust_prev_sales >= $${i}`;
+        i++;
+    };
+
+    sql += ` ORDER BY prod_id`;
+    // for debugging
+    console.log("sql: " + sql);
+    console.log("params: " + params);
+
+    return pool.query(sql, params)
+        .then(result => {
+            return {
+                trans: "success",
+                result: result.rows
+            }
+        })
+        .catch(err => {
+            return {
+                trans: "Error",
+                result: `Error: ${err.message}`
+            }
+        });
+};
+
 
 module.exports.insertCustomer = insertCustomer;
 module.exports.getRecordById = getRecordById;
