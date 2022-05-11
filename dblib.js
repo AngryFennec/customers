@@ -58,9 +58,19 @@ const deleteRecordById = (id) => {
 
 const updateRecordById = (customer) => {
     const params = convertCustomerToParams(customer);
-    sql = `UPDATE customers SET cust_fname = '${params[1]}', cust_lname = '${params[2]}', cust_state = '${params[3]}', 
-    cust_curr_sales = '${params[4]}', cust_prev_sales = '${params[5]}' WHERE cust_id = ${params[0]}`;
-
+    console.log(params);
+    sql = `UPDATE customers SET cust_fname = '${params[1]}', cust_lname = '${params[2]}'`;
+    if (params[3] !== null) {
+        sql += `,cust_state = '${params[3]}'`;
+    }
+    if (params[4] !== null) {
+        sql += `,cust_curr_sales = '${params[4]}'`;
+    }
+    if (params[5] !== null) {
+        sql += `,cust_prev_sales = '${params[5]}'`;
+    }
+    sql +=  ` WHERE cust_id = ${params[0]}`;
+    console.log(sql);
     return pool.query(sql)
         .then(result => {
             return {
@@ -118,48 +128,49 @@ const insertCustomer = (customer) => {
         });
 };
 
-const findProducts = (customer) => {
+const findCustomers = (customer) => {
     // Will build query based on data provided from the form
     //  Use parameters to avoid sql injection
 
     // Declare variables
     let i = 1;
     params = [];
-    sql = "SELECT * FROM customer WHERE true";
+    sql = "SELECT * FROM customers WHERE true";
 
     // Check data provided and build query as necessary
-    if (customer.cust_id !== "") {
-        params.push(parseInt(customer.cust_id));
+    if (customer.id) {
+        params.push(Number(customer.id));
         sql += ` AND cust_id = $${i}`;
         i++;
     };
-    if (customer.cust_fname !== "") {
-        params.push(`${customer.cust_fname}%`);
+    if (customer.fname) {
+        params.push(`${customer.fname}%`);
         sql += ` AND UPPER(cust_fname) LIKE UPPER($${i})`;
         i++;
     };
-    if (customer.cust_lname !== "") {
-        params.push(`${customer.cust_lname}%`);
+    if (customer.lname) {
+        params.push(`${customer.lname}%`);
         sql += ` AND UPPER(cust_lname) LIKE UPPER($${i})`;
         i++;
     };
-    if (customer.cust_state !== "") {
-        params.push(`${customer.cust_state}%`);
+    if (customer.state) {
+        params.push(`${customer.state}%`);
         sql += ` AND UPPER(cust_state) LIKE UPPER($${i})`;
         i++;
     };
-    if (customer.cust_curr_sales !== "") {
-        params.push(Number(customers.cust_curr_sales));
+
+    if (customer.sales) {
+        params.push(Number(customer.sales));
         sql += ` AND cust_curr_sales >= $${i}`;
         i++;
     };
-    if (customer.cust_prev_sales !== "") {
-        params.push(Number(customers.cust_prev_sales));
+    if (customer.prev) {
+        params.push(Number(customer.prev));
         sql += ` AND cust_prev_sales >= $${i}`;
         i++;
     };
 
-    sql += ` ORDER BY prod_id`;
+    sql += ` ORDER BY cust_id`;
     // for debugging
     console.log("sql: " + sql);
     console.log("params: " + params);
@@ -181,6 +192,7 @@ const findProducts = (customer) => {
 
 
 module.exports.insertCustomer = insertCustomer;
+module.exports.findCustomers = findCustomers;
 module.exports.getRecordById = getRecordById;
 module.exports.deleteRecordById = deleteRecordById;
 module.exports.updateRecordById = updateRecordById;

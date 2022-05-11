@@ -1,11 +1,46 @@
 <%- include("_header") -%>
 <h1>Find customers</h1>
+<p>Total number of records in database: <%= model.length %></p>
+<form action="/customers" method="POST" id="customers">
+    <p>
+        <label for="id">ID:</label>
+        <input name="id" id="id" type="text" pattern="\d*"> <!-- regex -->
+        <span>(equal)</span>
+    </p>
+    <p>
+        <label for="fname">First Name:</label>
+        <input type="text" name="fname" id="fname">
+        <span>(begins with)</span>
+    </p>
+    <p>
+        <label for="lname">Last Name:</label>
+        <input type="text" name="lname" id="lname">
+        <span>(begins with)</span>
+    </p>
+    <p>
+        <label for="state">State:</label>
+        <input type="text" name="state" id="state" pattern="[a-zA-Z]{1,2}">
+        <span>(equal)</span>
+    </p>
+    <p>
+        <label for="sales">Sales YTD:</label>
+        <input name="sales" id="sales" type="text" pattern="\d*">
+        <span>(greater than or equals to)</span>
+    </p>
+    <p>
+        <label for="prev">Previous Years Sales:</label>
+        <input name="prev" id="prev"  type="text" pattern="\d*">
+        <span>(greater than or equals to)</span>
+    </p>
 
-<% if(message !== "success") { %>
-    <h1>We Encountered an Error</h1>
-    <p><%= message %></p>
-<% } else { %>
-    <h2>Total number of records in the database: <%= model.length %></h2>
+    <button class="btn btn-primary" type="submit">Find</button>
+    <button class="btn btn-primary" type="reset">Reset</button>
+</form>
+
+<% if (type === "post") { %>
+    <% if (result.result.length === 0) { %>
+        <h3>No records found!</h3>
+    <% } else { %>
     <table class="table">
         <thead class="thead-light">
         <tr>
@@ -15,10 +50,11 @@
             <th scope="col">State Name</th>
             <th scope="col">Current sales</th>
             <th scope="col">Prev sales</th>
+            <th scope="col"><a href="/create" class="btn btn-success">Create</a></th>
         </tr>
         </thead>
         <tbody>
-        <% model.forEach(customer => { %>
+        <% result.result.forEach(customer => { %>
             <tr>
                 <td><%= customer.cust_id %></td>
                 <td><%= customer.cust_fname %></td>
@@ -26,10 +62,15 @@
                 <td><%= customer.cust_state %></td>
                 <td><%= customer.cust_curr_sales %></td>
                 <td><%= customer.cust_prev_sales %></td>
+                <td>
+                    <a href="/update/<%=customer.cust_id %>" class="btn btn-warning">Update</a>
+                    <a href="/delete/<%=customer.cust_id %>" class="btn btn-danger">Delete</a>
+                </td>
             </tr>
         <% }) %>
         </tbody>
     </table>
+<% } %>
 <% } %>
 
 <%- include("_footer") -%>

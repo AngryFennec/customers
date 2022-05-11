@@ -58,6 +58,32 @@ app.get("/update/:id", (req, res) => {
     })();
 });
 
+app.post("/customers", async (req, res) => {
+    // Omitted validation check
+    //  Can get this from the page rather than using another DB call.
+    //  Add it as a hidden form value.
+    const totRecs = await dblib.getTotalRecords();
+
+    dblib.findCustomers(req.body)
+        .then(result => {
+            console.log(result);
+            res.render("customers", {
+                type: "post",
+                model: totRecs.records,
+                result: result,
+                prod: req.body
+            })
+        })
+        .catch(err => {
+            res.render("customers", {
+                type: "post",
+                model: totRecs.records,
+                result: `Unexpected Error: ${err.message}`,
+                prod: req.body
+            });
+        });
+});
+
 app.post("/delete/:id", (req, res) => {
     (async () => {
         const data = await dblib.getRecordById(req.params.id);
@@ -89,8 +115,8 @@ app.get("/customers", (req, res) => {
     dblib.getTotalRecords().then(result => {
         res.render("customers", {
             model: result.records,
-            message: result.msg
-        })
+            type: "get",
+        });
     }
 );
 
