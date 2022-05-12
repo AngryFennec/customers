@@ -2,35 +2,35 @@
 <h1>Find customers</h1>
 <p>Total number of records in database: <%= model.length %></p>
 <form action="/customers" method="POST" id="customers">
-    <p>
-        <label for="id">ID:</label>
-        <input name="id" id="id" type="text" pattern="\d*"> <!-- regex -->
-        <span>(equal)</span>
+    <p class="row row-cols-sm-4 mb-2">
+        <label for="id" class="col">ID:</label>
+        <input class="form-control col" name="id" id="id" type="text" pattern="\d*"> <!-- regex -->
+        <span class="col">(equal)</span>
     </p>
-    <p>
-        <label for="fname">First Name:</label>
-        <input type="text" name="fname" id="fname">
-        <span>(begins with)</span>
+    <p class="row row-cols-sm-4 mb-2">
+        <label for="fname" class="col">First Name:</label>
+        <input class="form-control col" type="text" name="fname" id="fname">
+        <span class="col">(begins with)</span>
     </p>
-    <p>
-        <label for="lname">Last Name:</label>
-        <input type="text" name="lname" id="lname">
-        <span>(begins with)</span>
+    <p class="row row-cols-sm-4 mb-2">
+        <label for="lname" class="col">Last Name:</label>
+        <input class="form-control col" type="text" name="lname" id="lname">
+        <span class="col">(begins with)</span>
     </p>
-    <p>
-        <label for="state">State:</label>
-        <input type="text" name="state" id="state" pattern="[a-zA-Z]{1,2}">
-        <span>(equal)</span>
+    <p class="row row-cols-sm-4 mb-2">
+        <label for="state" class="col">State:</label>
+        <input class="form-control col" type="text" name="state" id="state" pattern="[a-zA-Z]{1,2}">
+        <span class="col">(equal)</span>
     </p>
-    <p>
-        <label for="sales">Sales YTD:</label>
-        <input name="sales" id="sales" type="text" pattern="\d*">
-        <span>(greater than or equals to)</span>
+    <p class="row row-cols-sm-4 mb-2">
+        <label for="sales" class="col">Sales YTD:</label>
+        <input class="form-control col" name="sales" id="sales" type="text" pattern="\d*">
+        <span class="col">(greater than or equals to)</span>
     </p>
-    <p>
-        <label for="prev">Previous Years Sales:</label>
-        <input name="prev" id="prev"  type="text" pattern="\d*">
-        <span>(greater than or equals to)</span>
+    <p class="row row-cols-sm-4 mb-2">
+        <label for="prev" class="col">Previous Years Sales:</label>
+        <input class="form-control col" name="prev" id="prev"  type="text" pattern="\d*">
+        <span class="col">(greater than or equals to)</span>
     </p>
 
     <button class="btn btn-primary" type="submit">Find</button>
