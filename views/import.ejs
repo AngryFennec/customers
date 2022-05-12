@@ -1,6 +1,6 @@
 <%- include("_header") -%>
 
-<h1>Select a file with products for Database Insert</h1>
+<h1>Select a file with customers for Database Insert</h1>
 <form action="/import" method="post">
     <input type="file" name="filename" required><p></p>
     <button class="btn btn-primary" type="submit">Import from file</button>
@@ -14,12 +14,14 @@
 
 <script>
     const loader = document.querySelector('#loader');
+    const info = document.querySelector('#import-info');
     document.querySelector("form").addEventListener("submit", e => {
         // Cancel default behavior of sending a synchronous POST request
         e.preventDefault();
         // Create a FormData object, passing the form as a parameter
         const formData = new FormData(e.target);
         loader.textContent = 'Please wait';
+        info.innerHTML = ''; // убираем результаты прошлого импорта, если они были
         // Send form data to the server with an asynchronous POST request
         fetch("/import", {
             method: "POST",
@@ -28,7 +30,6 @@
             .then(response => response.json())
             .then(result => {
                 loader.textContent = '';
-                const info = document.querySelector('#import-info');
 
                 const all = document.createElement('b');
                 all.textContent = `Records Processed: ${result.numInserted + result.numFailed}`;

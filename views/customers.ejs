@@ -56,15 +56,15 @@
         <tbody>
         <% result.result.forEach(customer => { %>
             <tr>
-                <td><%= customer.cust_id %></td>
-                <td><%= customer.cust_fname %></td>
-                <td><%= customer.cust_lname %></td>
-                <td><%= customer.cust_state %></td>
-                <td><%= customer.cust_curr_sales %></td>
-                <td><%= customer.cust_prev_sales %></td>
+                <td><%= customer.cus_id %></td>
+                <td><%= customer.cus_fname %></td>
+                <td><%= customer.cus_lname %></td>
+                <td><%= customer.cus_state %></td>
+                <td><%= customer.cus_sales_ytd %></td>
+                <td><%= customer.cus_sales_prev %></td>
                 <td>
-                    <a href="/update/<%=customer.cust_id %>" class="btn btn-warning">Update</a>
-                    <a href="/delete/<%=customer.cust_id %>" class="btn btn-danger">Delete</a>
+                    <a href="/update/<%=customer.cus_id %>" class="btn btn-warning">Update</a>
+                    <a href="/delete/<%=customer.cus_id %>" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
         <% }) %>

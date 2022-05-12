@@ -2,30 +2,30 @@
 
 <h1>Delete Customer</h1>
 
-<form action="/delete/<%= data.cust_id %>" method="POST" id="delete">
+<form action="/delete/<%= data.cus_id %>" method="POST" id="delete">
     <p class="row row-cols-sm-4 mb-2">
         <label for="id" class="col">ID:</label>
-        <input class="form-control col" name="id" id="id" required type="text" readonly value="<%= data.cust_id %>">
+        <input class="form-control col" name="id" id="id" required type="text" readonly value="<%= data.cus_id %>">
     </p>
     <p class="row row-cols-sm-4 mb-2">
         <label for="fname" class="col">First Name:</label>
-        <input class="form-control col" type="text" name="fname" id="fname"  readonly value="<%= data.cust_fname %>">
+        <input class="form-control col" type="text" name="fname" id="fname"  readonly value="<%= data.cus_fname %>">
     </p>
     <p class="row row-cols-sm-4 mb-2">
         <label for="lname" class="col">Last Name:</label>
-        <input class="form-control col" type="text" name="lname" id="lname"  readonly value="<%= data.cust_lname %>">
+        <input class="form-control col" type="text" name="lname" id="lname"  readonly value="<%= data.cus_lname %>">
     </p>
     <p class="row row-cols-sm-4 mb-2">
         <label for="state" class="col">State:</label>
-        <input class="form-control col" type="text" name="state" id="state" readonly value="<%= data.cust_state %>">
+        <input class="form-control col" type="text" name="state" id="state" readonly value="<%= data.cus_state %>">
     </p>
     <p class="row row-cols-sm-4 mb-2">
         <label for="sales" class="col">Sales YTD:</label>
-        <input class="form-control col" name="sales" id="sales" type="text"  readonly value="<%= data.cust_curr_sales %>">
+        <input class="form-control col" name="sales" id="sales" type="text"  readonly value="<%= data.cus_sales_ytd %>">
     </p>
     <p class="row row-cols-sm-4 mb-2">
         <label for="prev" class="col">Previous Years Sales:</label>
-        <input class="form-control col" name="prev" id="prev"  type="text" readonly value="<%= data.cust_prev_sales %>">
+        <input class="form-control col" name="prev" id="prev"  type="text" readonly value="<%= data.cus_sales_prev %>">
     </p>
 
     <button class="btn btn-danger" type="submit">Delete</button>

@@ -129,7 +129,7 @@ app.get("/export", (req, res) => {
 });
 
 app.post("/export",  (req, res) => {
-    const sql = "SELECT * FROM CUSTOMERS ORDER BY CUST_ID";
+    const sql = "SELECT * FROM customer ORDER BY cus_id";
     pool.query(sql, [], (err, result) => {
         let message = "";
         if(err) {
@@ -138,7 +138,7 @@ app.post("/export",  (req, res) => {
         } else {
             let output = "";
             result.rows.forEach(customer => {
-                output += `${customer.cust_id},${customer.cust_fname}, ${customer.cust_lname}, ${customer.cust_state}, ${customer.cust_curr_sales}, ${customer.cust_prev_sales}\r\n`;
+                output += `${customer.cus_id},${customer.cus_fname}, ${customer.cus_lname}, ${customer.cus_state}, ${customer.cus_sales_ytd}, ${customer.cus_sales_prev}\r\n`;
             });
             const fileName = req.body && req.body.exFilename ? req.body.exFilename : 'export.txt'; // тернаный оператор
             res.setHeader('Content-disposition', `attachment; filename=${fileName}`);

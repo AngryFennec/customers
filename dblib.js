@@ -10,7 +10,7 @@ const pool = new Pool({
 });
 
 const getTotalRecords = () => {
-    sql = "SELECT * FROM CUSTOMERS";
+    sql = "SELECT * FROM customer";
     return pool.query(sql)
         .then(result => {
             return {
@@ -26,7 +26,7 @@ const getTotalRecords = () => {
 };
 
 const getRecordById = (id) => {
-    sql = `SELECT * FROM CUSTOMERS WHERE cust_id=${id}`;
+    sql = `SELECT * FROM customer WHERE cus_id=${id}`;
     return pool.query(sql)
         .then(result => {
             return {
@@ -42,7 +42,7 @@ const getRecordById = (id) => {
 };
 
 const deleteRecordById = (id) => {
-    sql = `DELETE FROM CUSTOMERS WHERE cust_id=${id}`;
+    sql = `DELETE FROM customer WHERE cus_id=${id}`;
     return pool.query(sql)
         .then(result => {
             return {
@@ -58,17 +58,17 @@ const deleteRecordById = (id) => {
 
 const updateRecordById = (customer) => {
     const params = convertCustomerToParams(customer);
-    sql = `UPDATE customers SET cust_fname = '${params[1]}', cust_lname = '${params[2]}'`;
+    sql = `UPDATE customer SET cus_fname = '${params[1]}', cus_lname = '${params[2]}'`;
     if (params[3] !== null) {
-        sql += `,cust_state = '${params[3]}'`;
+        sql += `,cus_state = '${params[3]}'`;
     }
     if (params[4] !== null) {
-        sql += `,cust_curr_sales = '${params[4]}'`;
+        sql += `,cus_sales_ytd = '${params[4]}'`;
     }
     if (params[5] !== null) {
-        sql += `,cust_prev_sales = '${params[5]}'`;
+        sql += `,cus_sales_prev = '${params[5]}'`;
     }
-    sql +=  ` WHERE cust_id = ${params[0]}`;
+    sql +=  ` WHERE cus_id = ${params[0]}`;
     console.log(sql);
     return pool.query(sql)
         .then(result => {
@@ -109,7 +109,7 @@ const convertCustomerToParams = (customer) => {
 const insertCustomer = (customer) => {
     const params = convertCustomerToParams(customer);
 
-    const sql = `INSERT INTO CUSTOMERS(cust_id, cust_fname, cust_lname, cust_state, cust_curr_sales, cust_prev_sales) 
+    const sql = `INSERT INTO customer(cus_id, cus_fname, cus_lname, cus_state, cus_sales_ytd, cus_sales_prev) 
                  VALUES ($1, $2, $3, $4, $5, $6)`;
 
     return pool.query(sql, params)
@@ -134,42 +134,42 @@ const findCustomers = (customer) => {
     // Declare variables
     let i = 1;
     params = [];
-    sql = "SELECT * FROM customers WHERE true";
+    sql = "SELECT * FROM customer WHERE true";
 
     // Check data provided and build query as necessary
     if (customer.id) {
         params.push(Number(customer.id));
-        sql += ` AND cust_id = ${customer.id}`;
+        sql += ` AND cus_id = ${customer.id}`;
         i++;
     };
     if (customer.fname) {
         params.push(`${customer.fname}%`);
-        sql += ` AND UPPER(cust_fname) LIKE UPPER($${i})`; // регистронезависимый поиск aA = AA = aa = Aa
+        sql += ` AND UPPER(cus_fname) LIKE UPPER($${i})`; // регистронезависимый поиск aA = AA = aa = Aa
         i++;
     };
     if (customer.lname) {
         params.push(`${customer.lname}%`);
-        sql += ` AND UPPER(cust_lname) LIKE UPPER($${i})`;
+        sql += ` AND UPPER(cus_lname) LIKE UPPER($${i})`;
         i++;
     };
     if (customer.state) {
         params.push(`${customer.state}%`);
-        sql += ` AND UPPER(cust_state) = UPPER($${i})`;
+        sql += ` AND UPPER(cus_state) = UPPER($${i})`;
         i++;
     };
 
     if (customer.sales) {
         params.push(Number(customer.sales));
-        sql += ` AND cust_curr_sales >= $${i}`;
+        sql += ` AND cus_sales_ytd >= $${i}`;
         i++;
     };
     if (customer.prev) {
         params.push(Number(customer.prev));
-        sql += ` AND cust_prev_sales >= $${i}`;
+        sql += ` AND cus_sales_prev >= $${i}`;
         i++;
     };
 
-    sql += ` ORDER BY cust_id`;
+    sql += ` ORDER BY cus_id`;
     // for debugging
     console.log("sql: " + sql);
     console.log("params: " + params);
