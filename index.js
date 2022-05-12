@@ -45,7 +45,6 @@ app.get("/create", (req, res) => {
 app.get("/delete/:id", (req, res) => {
     (async () => {
         const data = await dblib.getRecordById(req.params.id);
-        console.log(data);
         res.render("delete", {message: '', data: data.records});
     })();
 });
@@ -53,9 +52,18 @@ app.get("/delete/:id", (req, res) => {
 app.get("/update/:id", (req, res) => {
     (async () => {
         const data = await dblib.getRecordById(req.params.id);
-        console.log(data);
         res.render("update", {message: '', data: data.records});
     })();
+});
+
+app.get("/customers", (req, res) => {
+    dblib.getTotalRecords().then(result => {
+            res.render("customers", {
+                model: result.records,
+                type: "get",
+            });
+        }
+    );
 });
 
 app.post("/customers", async (req, res) => {
@@ -66,11 +74,10 @@ app.post("/customers", async (req, res) => {
 
     dblib.findCustomers(req.body)
         .then(result => {
-            console.log(result);
             res.render("customers", {
                 type: "post",
                 model: totRecs.records,
-                result: result,
+                result: result, // массив результатов поиска
                 prod: req.body
             })
         })
@@ -95,9 +102,7 @@ app.post("/delete/:id", (req, res) => {
 
 app.post("/update/:id", (req, res) => {
     (async () => {
-        console.log(req.body);
         const result = await dblib.updateRecordById(req.body);
-        console.log(result);
         const data = await dblib.getRecordById(req.params.id);
         res.render("update",{message: result.msg, data: data.records});
     })();
@@ -111,16 +116,7 @@ app.post("/create",  (req, res) => {
     })();
 });
 
-app.get("/customers", (req, res) => {
-    dblib.getTotalRecords().then(result => {
-        res.render("customers", {
-            model: result.records,
-            type: "get",
-        });
-    }
-);
 
-});
 
 
 app.get("/export", (req, res) => {

@@ -58,7 +58,6 @@ const deleteRecordById = (id) => {
 
 const updateRecordById = (customer) => {
     const params = convertCustomerToParams(customer);
-    console.log(params);
     sql = `UPDATE customers SET cust_fname = '${params[1]}', cust_lname = '${params[2]}'`;
     if (params[3] !== null) {
         sql += `,cust_state = '${params[3]}'`;
@@ -140,12 +139,12 @@ const findCustomers = (customer) => {
     // Check data provided and build query as necessary
     if (customer.id) {
         params.push(Number(customer.id));
-        sql += ` AND cust_id = $${i}`;
+        sql += ` AND cust_id = ${customer.id}`;
         i++;
     };
     if (customer.fname) {
         params.push(`${customer.fname}%`);
-        sql += ` AND UPPER(cust_fname) LIKE UPPER($${i})`;
+        sql += ` AND UPPER(cust_fname) LIKE UPPER($${i})`; // регистронезависимый поиск aA = AA = aa = Aa
         i++;
     };
     if (customer.lname) {
@@ -155,7 +154,7 @@ const findCustomers = (customer) => {
     };
     if (customer.state) {
         params.push(`${customer.state}%`);
-        sql += ` AND UPPER(cust_state) LIKE UPPER($${i})`;
+        sql += ` AND UPPER(cust_state) = UPPER($${i})`;
         i++;
     };
 
