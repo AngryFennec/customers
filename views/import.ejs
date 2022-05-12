@@ -1,17 +1,18 @@
 <%- include("_header") -%>
 
 <h1>Select a file with products for Database Insert</h1>
-<form>
+<form action="/import" method="post">
     <input type="file" name="filename" required><p></p>
-    <input type="submit">
+    <button class="btn btn-primary" type="submit">Import from file</button>
 </form>
+
+
 <p id="loader"></p>
-<p id="result"></p>
+<div id="import-info" class="d-flex flex-column"></div>
+
+
 
 <script>
-    // Typically, if the script is large, we place it in a separate file
-    //   For demonstrations, it is included in the same file.
-    // Handle form submission
     const loader = document.querySelector('#loader');
     document.querySelector("form").addEventListener("submit", e => {
         // Cancel default behavior of sending a synchronous POST request
@@ -24,19 +25,35 @@
             method: "POST",
             body: formData
         })
-            .then(response => response.text())
-            .then(data => {
-                console.log(data);
+            .then(response => response.json())
+            .then(result => {
                 loader.textContent = '';
-                const resultElement = document.getElementById("result");
-                if (data.substring(0,5) === "Error") {
-                    resultElement.innerText = `Error occurred!  ${data}`
-                } else {
-                    resultElement.innerText = data;
-                };
+                const info = document.querySelector('#import-info');
+
+                const all = document.createElement('b');
+                all.textContent = `Records Processed: ${result.numInserted + result.numFailed}`;
+                info.append(all);
+
+                const success = document.createElement('b');
+                success.textContent = `Records inserted Successfully: ${result.numInserted}`;
+                info.append(success);
+
+                const fail = document.createElement('b');
+                fail.textContent = `Records Failed: ${result.numFailed}`;
+                info.append(fail);
+
+                if (result.errorMessage) {
+                    const errorTitle = document.createElement('b');
+                    errorTitle.textContent = `Errors:`;
+                    info.append(errorTitle);
+
+                    const errorText = document.createElement('p');
+                    errorText.innerText = result.errorMessage;
+                    info.append(errorText);
+                }
             })
             .catch(err => {
-                document.getElementById("message").textContent = `Error: ${err.message}`;
+                console.log(err);
             });
     });
 </script>

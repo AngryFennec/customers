@@ -5,9 +5,9 @@
 <form action="/export" method="post" id="export">
     <label>
         File name:
-        <input type="text" id="exFilename" name="exFilename" value="export.txt">
+        <input class="form-control" type="text" id="exFilename" name="exFilename" value="export.txt">
     </label>
-    <button type="submit">Export customers</button>
+    <button class="btn btn-primary" type="submit">Export customers</button>
 </form>
 <% if(message.substring(0,5) === "Error") { %>
     <h2>Error!</h2>

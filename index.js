@@ -150,7 +150,7 @@ app.post("/export",  (req, res) => {
 });
 
 app.get("/import", (req, res) => {
-    res.render("import", {message: ''});
+    res.render("import");
 });
 
 app.post("/import",  upload.single('filename'), (req, res) => {
@@ -183,6 +183,10 @@ app.post("/import",  upload.single('filename'), (req, res) => {
             console.log("Error Details:");
             console.log(errorMessage);
         };
-       res.send(errorMessage);
+       res.send({
+               errorMessage,
+               numInserted,
+               numFailed
+           });
     })();
 });
