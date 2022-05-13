@@ -32,11 +32,13 @@ const convertBookToParams = (book) => {
         params = book;
     } else {
         params = Object.values(book);
-        params.forEach((item, index) => {
-            if (index !== 0 && item === "" || item.toLowerCase() === 'null') {
+    }
+    params.forEach((item, index) => {
+          if (index !== 0 && (item === "" || item.toLowerCase() === 'null')) {
                 params[index] = null;
             }
         });
+        console.log(params);
     };
     return params;
 }
