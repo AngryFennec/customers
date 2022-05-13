@@ -1,0 +1,60 @@
+<%- include("_header") -%>
+
+<h1>Calculate sum of series</h1>
+
+<form id="sum">
+    <p class="row row-cols-sm-4 mb-2">
+        <label for="start" class="col">Enter starting number:</label>
+        <input class="form-control col" name="start" id="start" required type="text"> <!-- regex -->
+        <span class="col">(required)</span>
+    </p>
+    <p class="row row-cols-sm-4 mb-2">
+        <label for="end" class="col">Enter ending number:</label>
+        <input class="form-control col" type="text" name="end" id="end" required>
+        <span class="col">(required)</span>
+    </p>
+    <p class="row row-cols-sm-4 mb-2">
+        <label for="inc" class="col">Enter increment:</label>
+        <input class="form-control col" type="text" name="inc" id="inc" required>
+        <span class="col">(required)</span>
+    </p>
+
+    <button class="btn btn-primary" type="submit">Calc sum</button>
+</form>
+
+<p id="info"></p>
+
+<script>
+    const calcSum = (start, end, inc) => {
+        let sum = 0;
+        for (let i = start; i <= end; i += inc) {
+            sum += i;
+        }
+        return sum;
+    }
+
+    const form = document.querySelector('#sum');
+    const info = document.querySelector('#info');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const start = Number(formData.get('start'));
+        const end = Number(formData.get('end'));
+        const inc = Number(formData.get('inc'));
+        if (start >= end) {
+            info.textContent = 'Starting number must be less than ending number';
+            info.style.color = 'red';
+            info.style.fontWeight = 'bold';
+            info.style.fontSize = '30px';
+        } else {
+            result = calcSum(start, end, inc);
+            info.innerHTML = `The sum of numbers from ${start} to ${end} increment by ${inc} is <b>${result}</b>`;
+            info.style.color = 'black';
+            info.style.fontWeight = 'normal';
+            info.style.fontSize = '16px';
+        }
+    })
+
+</script>
+
+<%- include("_footer") -%>

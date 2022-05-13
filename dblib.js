@@ -62,6 +62,5 @@ const insertBook = (book) => {
         });
 };
 
-
 module.exports.insertBook = insertBook;
 module.exports.getTotalRecords = getTotalRecords;

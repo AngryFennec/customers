@@ -36,6 +36,31 @@ app.get("/", (req, res) => {
     res.render("index");
 });
 
+app.get("/sum", (req, res) => {
+    dblib.getTotalRecords().then(result => {
+        res.render("sum", {
+            errorMessage: '',
+            message: ''
+        })
+    });
+});
+
+app.post("/sum",  (req, res) => {
+    const start = req.body.start;
+    const end = req.body.end;
+    const inc = req.body.inc;
+    if (start >= end) {
+
+        res.render("sum", {
+            errorMessage: 'Starting number must be less than ending number',
+            message: ''
+        });
+        return;
+    } else {
+
+    }
+});
+
 app.get("/import", (req, res) => {
     dblib.getTotalRecords().then(result => {
         res.render("import", {
