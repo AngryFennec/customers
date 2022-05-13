@@ -1,7 +1,9 @@
 <%- include("_header") -%>
 
 <h1>Import Books</h1>
-<p>Total number of records in database: <b><%= model.length %></b></p>
+<% if (message.substr(0,5) !== 'Error') {%>
+    <p>Total number of records in database: <b><%= model.length %></b></p>
+<%}%>
 <p>Select a file with books for Database insert</p>
 <form action="/import" method="post">
     <input type="file" name="filename" required><p></p>

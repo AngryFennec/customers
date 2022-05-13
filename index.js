@@ -63,6 +63,7 @@ app.post("/sum",  (req, res) => {
 
 app.get("/import", (req, res) => {
     dblib.getTotalRecords().then(result => {
+        console.log(result);
         res.render("import", {
             model: result.records,
             message: result.msg
@@ -103,6 +104,7 @@ app.post("/import",  upload.single('filename'), (req, res) => {
         const total = await dblib.getTotalRecords();
        res.send({
            model: total.records,
+           message: '',
            errorMessage,
            numInserted,
            numFailed,
