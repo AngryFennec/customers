@@ -74,6 +74,8 @@ app.post("/customers", async (req, res) => {
 
     dblib.findCustomers(req.body)
         .then(result => {
+            console.log(result.result, result.result.length);
+
             res.render("customers", {
                 type: "post",
                 model: totRecs.records,
@@ -150,7 +152,12 @@ app.post("/export",  (req, res) => {
 });
 
 app.get("/import", (req, res) => {
-    res.render("import");
+    dblib.getTotalRecords().then(result => {
+        res.render("import", {
+            model: result.records,
+            message: result.msg
+        })
+    });
 });
 
 app.post("/import",  upload.single('filename'), (req, res) => {

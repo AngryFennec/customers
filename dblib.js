@@ -174,7 +174,7 @@ const findCustomers = (customer) => {
     console.log("sql: " + sql);
     console.log("params: " + params);
 
-    return pool.query(sql, params)
+    return pool.query(sql)
         .then(result => {
             return {
                 trans: "success",
