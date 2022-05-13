@@ -1,12 +1,5 @@
-101,Alfred,Alexander,NV,1500,900
-102,Cynthia,Chase,CA,900,1200
-103,Ernie,Ellis,CA,3500,4000
-104,Hubert,Hughes,CA,4500,2000
-105,Kathryn,King,NV,850,500
-106,Nicholas,Niles,NV,500,400
-107,Patricia,Pullman,AZ,1000,1100
-108,Sally,Smith,NV,1000,1100
-109,Shelly,Smith,NV,2500,0
-110,Terrance,Thomson,CA,5000,6000
-111,Valarie,Vega,AZ,0,3000
-112,Xavier,Xerox,AZ,600,250
+1016,Introducing HTML5,223,3.97,9780320000000,2010-07-21
+1017,Are You Smart Enough to Work at Google?,290,3.52,9780320000000,2012-01-04
+1018,Elements of ML Programming Ml97 Edition,400,3.7,9780140000000,1998-01-01
+1019,Scrum and XP from the Trenches,140,4.17,9781430000000,2007-10-05
+1020,What is HTML 5?,27,3.31,Null,Null

@@ -1,5 +1,5 @@
 {
-  "name": "customers",
+  "name": "books",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -13,10 +13,6 @@
   },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/AngryFennec/customers/issues"
-  },
-  "homepage": "https://github.com/AngryFennec/customers#readme",
   "dependencies": {
     "dotenv": "^16.0.0",
     "ejs": "^3.1.7",
