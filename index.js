@@ -100,10 +100,12 @@ app.post("/import",  upload.single('filename'), (req, res) => {
             console.log("Error Details:");
             console.log(errorMessage);
         };
+        const total = await dblib.getTotalRecords();
        res.send({
-               errorMessage,
-               numInserted,
-               numFailed
+           model: total.records,
+           errorMessage,
+           numInserted,
+           numFailed,
            });
     })();
 });
